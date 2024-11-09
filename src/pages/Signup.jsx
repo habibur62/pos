@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import loginImg from '../assets/login.png'
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import SummaryApi from '../common';
+import { toast } from 'react-toastify';
 export default function Signup() {
   const [showhidePass, setShowhidePass] = useState(false)
   const [showConfirmPass, setShowConfirmPass] = useState(false)
@@ -14,6 +16,8 @@ export default function Signup() {
       confirmPassword: "",
       profilePic: ""
   })
+  const navigate = useNavigate()
+
   const handleOnChange = (e) =>{
       const {name, value} = e.target
       setData((prev)=>{
@@ -43,9 +47,32 @@ export default function Signup() {
   //console.log(image)
   
 
- // console.log(data)
-  const handleOnSubmit = (e) =>{
+ // connect with backend
+  const handleOnSubmit = async(e) =>{
       e.preventDefault()
+
+      if(data.password === data.confirmPassword){
+        const dataResponse = await fetch(SummaryApi.signUp.url,{
+            method: SummaryApi.signUp.method,
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(data)    
+        })
+    
+          const dataApi = await dataResponse.json()
+          if(dataApi.success){
+            toast.success(dataApi.message)
+            navigate("/login")
+          }
+          if(dataApi.error){
+            toast.error(dataApi.message)
+          }
+
+      }else{
+        console.log("Password did not match")
+      }
+    
   }
   
 

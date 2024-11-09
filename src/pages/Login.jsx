@@ -1,7 +1,10 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import loginImg from '../assets/login.png'
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import SummaryApi from '../common';
+import { toast } from 'react-toastify';
+import Context from '../context';
 
 
 export default function Login() {
@@ -11,6 +14,10 @@ export default function Login() {
         email: "",
         password: ""
     })
+
+    const navigate = useNavigate();
+    const {fetchUserDetails } = useContext(Context)
+
     const handleOnChange = (e) =>{
         const {name, value} = e.target
 
@@ -22,9 +29,28 @@ export default function Login() {
             }
         })
     }
-    console.log(data)
-    const handleOnSubmit = (e) =>{
+
+    const handleOnSubmit = async(e) =>{
         e.preventDefault()
+        const fetchData = await fetch(SummaryApi.signIn.url,{
+            method: SummaryApi.signIn.method,
+            credentials: 'include',
+            headers: {
+                "content-type" : "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+
+        const dataApi = await fetchData.json()
+
+        if(dataApi.success){
+            toast.success(dataApi.message)
+            navigate("/")
+            fetchUserDetails()
+        }
+        if(dataApi.error){
+            toast.error(dataApi.message)
+        }
     }
   return (
     <section id='login'>

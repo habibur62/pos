@@ -3,8 +3,12 @@ import Logo from './Logo'
 import { IoMdSearch } from "react-icons/io";
 import { FaRegUserCircle } from "react-icons/fa";
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 export default function Header() {
+    const user = useSelector(state=>state?.user?.user)
+    console.log(user)
+    
   return (
     <header className='h-16 shadow-sm bg-slate-100 '>
         <div className='container mx-auto h-full flex items-center justify-between '>
@@ -21,7 +25,13 @@ export default function Header() {
             </div>
             <div className='flex items-center gap-4 '>
                 <div className='text-3xl cursor-pointer  '>
-                     <FaRegUserCircle />
+                    {
+                        user?.profilePic ? (
+                            <img src={user?.profilePic} className='w-10 h-10 rounded-full ' />
+                        ) :(
+                            <FaRegUserCircle />
+                        )
+                    }
                </div>
                <div >
                      <Link to={"/login"} className='px-2 py-1 text-white bg-red-500 rounded-full '>Login</Link>
