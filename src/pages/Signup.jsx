@@ -4,6 +4,9 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from 'react-router-dom';
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
+
+
+
 export default function Signup() {
   const [showhidePass, setShowhidePass] = useState(false)
   const [showConfirmPass, setShowConfirmPass] = useState(false)

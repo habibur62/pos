@@ -18,7 +18,10 @@ const SummaryApi = {
         url:`${backendDomain}/api/logout`,
         method: "get"
     },
-    
+    createProduct: {
+        url:`${backendDomain}/api/create`,
+        method: "post"
+    },
 
 
     
