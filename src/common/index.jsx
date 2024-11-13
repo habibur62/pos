@@ -22,6 +22,10 @@ const SummaryApi = {
         url:`${backendDomain}/api/create`,
         method: "post"
     },
+    allUsers: {
+        url:`${backendDomain}/api/all-users`,
+        method: "get"
+    },
 
 
     
