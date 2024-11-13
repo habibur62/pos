@@ -3,18 +3,19 @@ import SummaryApi from '../common'
 import { toast } from "react-toastify"; 
 import { FaEdit } from "react-icons/fa";
 
-export default function AllUsers() {
-    const [allUser, setAllUser] = useState([])
+export default function AllProduct() {
+    const [allProduct, setAllProduct] = useState([])
 
-    const fetchAllUsers = async()=>{
-        const dataResponse = await fetch(SummaryApi.allUsers.url,{
-            method: SummaryApi.allUsers.method,
+    const fetchAllProduct = async()=>{
+        const dataResponse = await fetch(SummaryApi.allProduct.url,{
+            method: SummaryApi.allProduct.method,
             credentials: 'include'
         })
 
         const dataApi = await dataResponse.json()
+
         if(dataApi.success){
-          setAllUser(dataApi.data)
+          setAllProduct(dataApi.data)
         }
         if(dataApi.error){
           toast.error(dataApi.error);
@@ -22,7 +23,7 @@ export default function AllUsers() {
     }
 
     useEffect(()=>{
-        fetchAllUsers()
+        fetchAllProduct()
     },[])
 
 
@@ -31,24 +32,28 @@ export default function AllUsers() {
       <table className='w-full userTable' >
         <thead className='bg-slate-100'>
           <tr>
-            <th>Sr.</th>
+            <th>Si</th>
+            <th>Id</th>
             <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Stock</th>
             <th>Created Date</th>
-            <th>Action</th>
+            <th>Image</th>
           </tr>
         </thead>
         <tbody>
             {
-              allUser.map((user,index)=>{
+              allProduct.map((product,index)=>{
                 return(
                   <tr key={index}>
                     <td>{index+1}</td>
-                    <td>{user.name}</td>
-                    <td>{user.email}</td>
-                    <td>{user.role}</td>
-                    <td>{new Date(user.createdAt).toLocaleDateString()}</td>
+                    <td>{product._id}</td>
+                    <td>{product?.name}</td>
+                    <td>{product?.price}</td>
+                    <td>{product?.category}</td>
+                    <td>{product.stock}</td>
+                    <td>{new Date(product.createdAt).toLocaleDateString()}</td>
                     <td>
                       <button className='bg-green-100 p-2 rounded-full hover:bg-green-400 '><FaEdit /></button>
                     </td>
