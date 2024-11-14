@@ -3,11 +3,14 @@ import SummaryApi from '../common'
 import { toast } from "react-toastify"; 
 import { FaEdit } from "react-icons/fa";
 import AddProduct from '../components/AddProduct';
+import EditProduct from '../components/EditProduct';
+import { MdDelete } from "react-icons/md";
 
 export default function AllProduct() {
     const [allProduct, setAllProduct] = useState([])
     const [openUpload, setOpenUpload] = useState(false)
     const [openEdit, setOpenEdit] = useState(false)
+    const [editProductData, setEditProductData] = useState(null); // Track data for the product to edit
 
     const fetchAllProduct = async()=>{
         const dataResponse = await fetch(SummaryApi.allProduct.url,{
@@ -29,6 +32,15 @@ export default function AllProduct() {
         fetchAllProduct()
     },[])
 
+    //edit product...................
+    const handleEditClick = (product)=>{
+      setEditProductData(product);
+      setOpenEdit(true);
+    }
+    //delete product.......
+    const handleDeleteClick = (product)=>{
+      setEditProductData(product);
+    }
 
   return (
     <div className='w-full p-4 overflow-x-auto'>
@@ -46,7 +58,8 @@ export default function AllProduct() {
             <th>Category</th>
             <th>Stock</th>
             <th>Created Date</th>
-            <th>Image</th>
+            <th>Edit</th>
+            <th>Delete</th>
           </tr>
         </thead>
         <tbody>
@@ -62,7 +75,11 @@ export default function AllProduct() {
                     <td>{product.stock}</td>
                     <td>{new Date(product.createdAt).toLocaleDateString()}</td>
                     <td>
-                      <button className='bg-green-100 p-2 rounded-full hover:bg-green-400 ' onClick={()=>setOpenEdit(!openEdit)} ><FaEdit /></button>
+                      <button className='bg-green-100 p-2 rounded-full hover:bg-green-400 ' onClick={() => handleEditClick(product)} ><FaEdit /></button>
+                    </td>
+                    <td>
+                      <button className='bg-red-400 text-white p-2 rounded-full hover:bg-red-700 ' onClick={() => handleDeleteClick(product)} ><MdDelete />
+                      </button>
                     </td>
                   </tr>
                 )
@@ -71,12 +88,14 @@ export default function AllProduct() {
         </tbody>
       </table>
       {
-        openUpload && 
-        <AddProduct onclose={setOpenUpload}/>
+        openUpload && (
+          <AddProduct onclose={setOpenUpload}/>
+        )
       }
       {
-        openEdit && 
-        <EditProduct onclose={setOpenEdit}/>
+        openEdit && editProductData && (
+          <EditProduct onClose={setOpenEdit} initailData={editProductData} callProduct={fetchAllProduct()} />
+        )
       }
     </div>
   )
