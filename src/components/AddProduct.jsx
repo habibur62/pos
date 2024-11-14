@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import SummaryApi from '../common';
 import { MdCancel } from "react-icons/md";
 
-function AddProduct({onclose}) {
+function AddProduct({onclose, callProduct}) {
     const [formData, setFormData] = useState({
         name: "",
         price: "",
@@ -47,6 +47,8 @@ function AddProduct({onclose}) {
 
           if(dataApi.success){
             toast.success(dataApi.message)
+            onclose()
+            callProduct()
           }
           if(dataApi.error){
             toast.error(dataApi.message)

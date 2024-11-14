@@ -5,6 +5,7 @@ import { FaEdit } from "react-icons/fa";
 import AddProduct from '../components/AddProduct';
 import EditProduct from '../components/EditProduct';
 import { MdDelete } from "react-icons/md";
+import DeleteProduct from '../components/DeleteProduct';
 
 export default function AllProduct() {
     const [allProduct, setAllProduct] = useState([])
@@ -38,9 +39,13 @@ export default function AllProduct() {
       setOpenEdit(true);
     }
     //delete product.......
+    const [deleteProduct, setDeleteProduct] = useState(null)
     const handleDeleteClick = (product)=>{
-      setEditProductData(product);
+      setDeleteProduct(product);
     }
+    const handleCancelDelete = () => {
+      setDeleteProduct(null);
+    };
 
   return (
     <div className='w-full p-4 overflow-x-auto'>
@@ -89,12 +94,19 @@ export default function AllProduct() {
       </table>
       {
         openUpload && (
-          <AddProduct onclose={setOpenUpload}/>
+          <AddProduct onclose={setOpenUpload} callProduct={fetchAllProduct}/>
         )
       }
       {
         openEdit && editProductData && (
-          <EditProduct onClose={setOpenEdit} initailData={editProductData} callProduct={fetchAllProduct()} />
+          <EditProduct onClose={setOpenEdit} initailData={editProductData} callProduct={fetchAllProduct} />
+        )
+      }
+      
+      {
+        
+        deleteProduct && (
+          <DeleteProduct productId={deleteProduct} callProduct={fetchAllProduct} onCancelDelete={handleCancelDelete} />
         )
       }
     </div>
