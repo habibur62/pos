@@ -7,7 +7,7 @@ import Signup from "../pages/Signup";
 import AdminPanel from "../pages/AdminPanel";
 import AllUsers  from "../pages/AllUsers";
 import AllProduct from "../pages/Allproduct";
-
+import Order from "../pages/Order"
 
 const router = createBrowserRouter([
     {
@@ -44,7 +44,11 @@ const router = createBrowserRouter([
             }
             
           ]
-        }
+        },
+        {
+          path: "order",
+          element: <Order />
+        },
       ]
     }
 ])
