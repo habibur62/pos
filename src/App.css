@@ -11,3 +11,24 @@
 .userTable td{
     @apply border text-base text-center
 }
+
+@media print {
+    .print\:hidden {
+        display: none !important;
+    }
+    .print\:static {
+        position: static !important;
+    }
+    .print\:bg-white {
+        background-color: white !important;
+    }
+    .print\:text-black {
+        color: black !important;
+    }
+    .bg-black {
+        background-color: black !important; /* Ensure the background color applies */
+        -webkit-print-color-adjust: exact; /* For Chrome and Safari */
+        print-color-adjust: exact;         /* For modern browsers */
+    }
+
+}

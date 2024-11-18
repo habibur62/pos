@@ -38,6 +38,15 @@ const SummaryApi = {
         url:`${backendDomain}/api/delete-product`,
         method: "delete"
     },
+    customers: {
+        url:`${backendDomain}/api/customers`,
+        method: "get"
+    },
+
+    orderProduct: {
+        url:`${backendDomain}/api/orders`,
+        method: "post"
+    },
 
 
     
