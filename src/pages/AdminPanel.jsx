@@ -28,11 +28,13 @@ export default function AdminPanel() {
                 <nav className='grid p-4 '>
                     <Link to={"all-users"} className='px-2 hover:bg-slate-100 ' >All Users</Link>
                     <Link to={"all-product"} className='px-2 hover:bg-slate-100 ' >All product</Link>
+                    <Link to={"all-orders"} className='px-2 hover:bg-slate-100 ' >Orders</Link>
+
 
                 </nav>
             </div>
         </aside>
-        <main>
+        <main className='w-full h-full'>
             <Outlet />
         </main>
     </div>

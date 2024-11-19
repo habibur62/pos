@@ -8,6 +8,7 @@ import AdminPanel from "../pages/AdminPanel";
 import AllUsers  from "../pages/AllUsers";
 import AllProduct from "../pages/Allproduct";
 import Order from "../pages/Order"
+import AllOrder from "../pages/AllOrder";
 
 const router = createBrowserRouter([
     {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
             {
               path: "all-product",
               element: <AllProduct />
+            },
+            {
+              path: "all-orders",
+              element: <AllOrder />
             }
             
           ]

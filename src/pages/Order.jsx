@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import SummaryApi from '../common'
 import { toast } from 'react-toastify'
 import Invoice from '../components/Invoice'
+import { FaRegTrashAlt } from "react-icons/fa";
 
 export default function Order() {
     const [allProduct, setAllProduct] = useState([])
@@ -29,6 +30,8 @@ export default function Order() {
         phone: "",
         customerName: "",
     });
+
+
 
     const [loading, setLoading] = useState(false);
 
@@ -111,45 +114,41 @@ export default function Order() {
 
 
     //customer search by phone
-    const [customers, setCustomers] = useState("")
+    const [customers, setCustomers] = useState()
 
     const fetchAllCustomers = async()=>{
-        //console.log("phone", formData.phone);
         const dataResponse = await fetch(SummaryApi.customers.url,{
             method: SummaryApi.customers.method,
             credentials: 'include',
             headers: {
                 "content-type": "application/json",
             },
-            body: JSON.stringify(formData.phone)
+            body: JSON.stringify(formData)
 
         })
+        
 
         const dataApi = await dataResponse.json()
+       // console.log("phone", customers);
         if(dataApi.success){
             setCustomers(dataApi.data)
+            setFormData((prevFormData) => ({
+                ...prevFormData,  // Spread the previous state to retain other fields
+                customerName: dataApi.data, // Update customerName field
+            }));
         }
         if(dataApi.error){
           toast.error(dataApi.error);
         }
     }
 
-    useEffect(()=>{
-        fetchAllCustomers()
-    },[])
-
-
-
-
-
     //order submit.................
 
-    const  handleSubmitOrder = async (e) => {
-        e.preventDefault();
+    const  handleSubmitOrder = async () => {
 
         // Add form validation
-        if (!formData.customerName || !formData.phone) {
-            toast.error("Product name and phone are required!");
+        if (!orderItems.length) {
+            toast.error("No product added");
             return;
         }
 
@@ -189,9 +188,10 @@ export default function Order() {
         }
     }
 
+
   return (
     <div className='flex justify-center my-4'>
-        <div className='bg-white w-full max-w-[400px] h-auto p-2 rounded shadow-sm '>
+        <div className='bg-white w-full max-w-[500px] h-auto p-2 rounded shadow-sm '>
         <div className="p-4">
             <h1 className="text-2xl mb-4">Create Order</h1>
             <div>
@@ -233,14 +233,14 @@ export default function Order() {
                     
                     <input
                         type="number"
-                        className="border rounded w-1/4 p-2"
+                        className="border rounded w-1/6 p-2"
                         value={item.quantity}
                         min="1"
                         onChange={(e) => handleQuantityChange(index, Number(e.target.value))}
                     />
                     <input
                         type="text"
-                        className="border rounded w-1/4 p-2"
+                        className="border rounded w-1/6 p-2"
                         value={item.subtotal}
                         readOnly
                     />
@@ -248,7 +248,8 @@ export default function Order() {
                         className="bg-red-500 text-white p-2 rounded"
                         onClick={() => handleRemoveProduct(index)}
                     >
-                        Remove
+                        <FaRegTrashAlt />
+
                     </button>
                 </div>
             ))}
@@ -279,7 +280,7 @@ export default function Order() {
                         className='border rounded w-full'
                         type="text"
                         name="customerName"
-                        value={formData.customerName}
+                        value={customers||formData.customerName}
                         onChange={handleChange}
                         required
                     />
@@ -293,7 +294,18 @@ export default function Order() {
         </div>
     {
         openInvoice && (
-            <Invoice onClose={()=>setOpenInvoice(!openInvoice)} products={orderItems} total={orderTotal} qty={orderTotalQty} />
+            <Invoice onClose={()=>{
+                setOpenInvoice(!openInvoice);
+                setOrderItems([]);
+                setFormData({
+                    phone: "",
+            customerName: "",
+                });
+                setOrderTotal(0);
+                setOrderTotalQty(0);
+            
+            }}
+             products={orderItems} total={orderTotal} qty={orderTotalQty} />
         )
     }
     </div>
