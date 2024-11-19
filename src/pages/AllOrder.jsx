@@ -88,15 +88,6 @@ export default function AllOrder() {
                     </tbody>
                 </table>
             </div>
-            {openUpload && (
-                <AddProduct onClose={setOpenUpload} callProduct={fetchAllProduct} />
-            )}
-            {openEdit && editProductData && (
-                <EditProduct onClose={setOpenEdit} initialData={editProductData} callProduct={fetchAllProduct} />
-            )}
-            {deleteProduct && (
-                <DeleteProduct productId={deleteProduct} callProduct={fetchAllProduct} onCancelDelete={handleCancelDelete} />
-            )}
         </div>
     );
 }
