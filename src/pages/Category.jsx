@@ -6,16 +6,19 @@ import AddProduct from '../components/AddProduct';
 import EditProduct from '../components/EditProduct';
 import { MdDelete } from "react-icons/md";
 import DeleteProduct from '../components/DeleteProduct';
+import AddCategory from '../components/AddCategory';
+import EditCategory from '../components/EditCategory';
+import DeleteCategory from '../components/DeleteCategory';
 
-export default function AllProduct() {
+export default function Category() {
     const [allProduct, setAllProduct] = useState([]);
     const [openUpload, setOpenUpload] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
     const [editProductData, setEditProductData] = useState(null); // Track data for the product to edit
 
     const fetchAllProduct = async () => {
-        const dataResponse = await fetch(SummaryApi.allProduct.url, {
-            method: SummaryApi.allProduct.method,
+        const dataResponse = await fetch(SummaryApi.categoryList.url, {
+            method: SummaryApi.categoryList.method,
             credentials: 'include'
         });
 
@@ -51,12 +54,12 @@ export default function AllProduct() {
     return (
         <div className='p-4 overflow-hidden'>
             <div className='flex justify-between items-center bg-gray-200 p-4 rounded mb-4'>
-                <h2 className='text-lg font-semibold'>All Products</h2>
+                <h2 className='text-lg font-semibold'>All Category</h2>
                 <button 
                     className='bg-red-500 text-white rounded-full px-4 py-2 hover:bg-red-700'
                     onClick={() => setOpenUpload(!openUpload)}
                 >
-                    Upload Product
+                    Upload Category
                 </button>
             </div>
             <div className="overflow-x-auto">
@@ -65,10 +68,7 @@ export default function AllProduct() {
                         <tr>
                             <th className='px-4 py-2 border'>Si</th>
                             <th className='px-4 py-2 border'>Id</th>
-                            <th className='px-4 py-2 border'>Name</th>
-                            <th className='px-4 py-2 border'>Price</th>
                             <th className='px-4 py-2 border'>Category</th>
-                            <th className='px-4 py-2 border'>Stock</th>
                             <th className='px-4 py-2 border'>Created Date</th>
                             <th className='px-4 py-2 border'>Edit</th>
                             <th className='px-4 py-2 border'>Delete</th>
@@ -79,10 +79,7 @@ export default function AllProduct() {
                             <tr key={index} className='hover:bg-gray-50'>
                                 <td className='px-4 py-2 border text-center'>{index + 1}</td>
                                 <td className='px-4 py-2 border'>{product._id}</td>
-                                <td className='px-4 py-2 border'>{product?.name}</td>
-                                <td className='px-4 py-2 border'>${product?.price}</td>
                                 <td className='px-4 py-2 border'>{product?.category}</td>
-                                <td className='px-4 py-2 border text-center'>{product.stock}</td>
                                 <td className='px-4 py-2 border'>{new Date(product.createdAt).toLocaleDateString()}</td>
                                 <td className='px-4 py-2 border text-center'>
                                     <button 
@@ -106,14 +103,14 @@ export default function AllProduct() {
                 </table>
             </div>
             {openUpload && (
-                <AddProduct onClose={setOpenUpload} callProduct={fetchAllProduct} />
+                <AddCategory onClose={setOpenUpload} callProduct={fetchAllProduct} />
             )}
             
             {openEdit && editProductData && (
-                <EditProduct onClose={setOpenEdit} initialData={editProductData} callProduct={fetchAllProduct} />
+                <EditCategory onClose={setOpenEdit} initialData={editProductData} callProduct={fetchAllProduct} />
             )}
             {deleteProduct && (
-                <DeleteProduct productId={deleteProduct} callProduct={fetchAllProduct} onCancelDelete={handleCancelDelete} />
+                <DeleteCategory productId={deleteProduct} callProduct={fetchAllProduct} onCancelDelete={handleCancelDelete} />
             )}
         </div>
     );

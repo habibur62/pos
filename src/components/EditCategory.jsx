@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import SummaryApi from '../common';
 import { MdCancel } from "react-icons/md";
 
-function EditProduct({onClose, initialData, callProduct}) {
+function EditCategory({onClose, initialData, callProduct}) {
     const [formData, setFormData] = useState(initialData);
     const [loading, setLoading] = useState(false);
 
@@ -18,18 +18,12 @@ function EditProduct({onClose, initialData, callProduct}) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Add form validation
-        if (!formData.name || !formData.price) {
-            toast.error("Product name and price are required!");
-            return;
-        }
-
         setLoading(true);
 
         try {
 
-            const dataResponse = await fetch(SummaryApi.updateProduct.url,{
-                method: SummaryApi.updateProduct.method,
+            const dataResponse = await fetch(SummaryApi.updateCategory.url,{
+                method: SummaryApi.updateCategory.method,
                 credentials: "include",
                 headers: {
                     "content-type": "application/json",
@@ -42,7 +36,7 @@ function EditProduct({onClose, initialData, callProduct}) {
           if(dataApi.success){
             toast.success(dataApi.message)
             onClose()
-            callProduct
+            callProduct()
           }
           if(dataApi.error){
             toast.error(dataApi.message)
@@ -50,7 +44,7 @@ function EditProduct({onClose, initialData, callProduct}) {
             
         } catch (error) {
             console.error(error);
-            toast.error("Failed to upload product. Please try again later.");
+            toast.error("Failed to upload category. Please try again later.");
         } finally {
             setLoading(false);
         }
@@ -63,29 +57,7 @@ function EditProduct({onClose, initialData, callProduct}) {
             <MdCancel className='text-red-500 text-xl cursor-pointer ' onClick={()=>onClose()} />
         </div>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Product Name:</label>
-                    <input
-                        className='border rounded w-full'
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
-                <div>
-                    <label>Price</label>
-                    <input
-                        className='border rounded w-full'
 
-                        type="number"
-                        name="price"
-                        value={formData.price}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
                 <div>
                     <label>Category</label>
                     <input
@@ -96,19 +68,9 @@ function EditProduct({onClose, initialData, callProduct}) {
                         onChange={handleChange}
                     />
                 </div>
-                <div>
-                    <label>Description</label>
-                    <textarea
-                        className='border rounded w-full'
-
-                        name="description"
-                        value={formData.description}
-                        onChange={handleChange}
-                    />
-                </div>
                 
                 <button type="submit" disabled={loading} className='my-2 bg-red-500 px-4 py-1 rounded w-full block items-center text-white hover:bg-red-600 transition-all ' >
-                    {loading ? "Editing..." : "Edit Product"}
+                    {loading ? "Editing..." : "Edit Category"}
                 </button>
             </form>
         </div>
@@ -116,4 +78,4 @@ function EditProduct({onClose, initialData, callProduct}) {
   )
 }
 
-export default EditProduct
+export default EditCategory

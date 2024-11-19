@@ -22,10 +22,27 @@ const SummaryApi = {
         url:`${backendDomain}/api/all-users`,
         method: "get"
     },
+    createCategory: {
+        url:`${backendDomain}/api/create-Category`,
+        method: "post"
+    },
+    categoryList: {
+        url:`${backendDomain}/api/category-list`,
+        method: "get"
+    },
+    updateCategory: {
+        url:`${backendDomain}/api/update-category`,
+        method: "put"
+    },
+    deleteCategory: {
+        url:`${backendDomain}/api/delete-category`,
+        method: "delete"
+    },
     createProduct: {
         url:`${backendDomain}/api/create`,
         method: "post"
     },
+    
     allProduct: {
         url:`${backendDomain}/api/all-product`,
         method: "get"
@@ -50,6 +67,7 @@ const SummaryApi = {
         url:`${backendDomain}/api/all-orders`,
         method: "get"
     },
+    
 
 
     
