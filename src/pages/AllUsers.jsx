@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react'
 import SummaryApi from '../common'
 import { toast } from "react-toastify"; 
 import { FaEdit } from "react-icons/fa";
+import AddStaff from '../components/AddStaff';
 
 export default function AllUsers() {
     const [allUser, setAllUser] = useState([])
+    const [openUpload, setOpenUpload] = useState(false);
+
 
     const fetchAllUsers = async()=>{
         const dataResponse = await fetch(SummaryApi.allUsers.url,{
@@ -28,6 +31,15 @@ export default function AllUsers() {
 
   return (
     <div className='w-full p-4'>
+      <div className='flex justify-between items-center bg-gray-200 p-4 rounded mb-4'>
+                <h2 className='text-lg font-semibold'>All Users</h2>
+                <button 
+                    className='bg-red-500 text-white rounded-full px-4 py-2 hover:bg-red-700'
+                    onClick={() => setOpenUpload(!openUpload)}
+                >
+                    Upload Staff
+                </button>
+            </div>
       <table className='w-full userTable' >
         <thead className='bg-slate-100'>
           <tr>
@@ -58,6 +70,9 @@ export default function AllUsers() {
             }
         </tbody>
       </table>
+      {openUpload && (
+                <AddStaff onClose={setOpenUpload} callUsers={fetchAllUsers} />
+      )}
     </div>
   )
 }

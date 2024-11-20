@@ -22,6 +22,10 @@ const SummaryApi = {
         url:`${backendDomain}/api/all-users`,
         method: "get"
     },
+    addStaff: {
+        url:`${backendDomain}/api/add-staff`,
+        method: "post"
+    },
     createCategory: {
         url:`${backendDomain}/api/create-Category`,
         method: "post"
