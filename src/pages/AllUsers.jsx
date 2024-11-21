@@ -3,10 +3,15 @@ import SummaryApi from '../common'
 import { toast } from "react-toastify"; 
 import { FaEdit } from "react-icons/fa";
 import AddStaff from '../components/AddStaff';
+import { MdOutlineDelete } from "react-icons/md";
+import EditUser from '../components/EditUser';
+import DeleteUser from '../components/DeleteUser';
 
 export default function AllUsers() {
     const [allUser, setAllUser] = useState([])
     const [openUpload, setOpenUpload] = useState(false);
+    const [openEdit, setOpenEdit] = useState(false);
+    const [editUserData, setEditUserData] = useState(null); // Track data for the product to edit
 
 
     const fetchAllUsers = async()=>{
@@ -16,8 +21,10 @@ export default function AllUsers() {
         })
 
         const dataApi = await dataResponse.json()
+        
         if(dataApi.success){
           setAllUser(dataApi.data)
+
         }
         if(dataApi.error){
           toast.error(dataApi.error);
@@ -28,6 +35,44 @@ export default function AllUsers() {
         fetchAllUsers()
     },[])
 
+    //role count
+    const [roleCounts, setRoleCounts] = useState({ admin: 0, staff: 0 });
+
+useEffect(() => {
+  const counts = allUser.reduce(
+    (acc, user) => {
+      if (user.role === "Admin") {
+        acc.admin += 1;
+      } else if (user.role === "Staff") {
+        acc.staff += 1;
+      }
+      return acc;
+    },
+    { admin: 0, staff: 0 } // Initialize both counts to 0
+  );
+
+   setRoleCounts(counts);
+  }, [allUser]); // Re-run when allUser changes
+
+  //Edit user role.................................
+    const handleEditClick = (user) => {
+      setEditUserData(user);
+      setOpenEdit(true);
+
+  };
+
+   // Delete product
+   const [deleteUser, setDeleteUser] = useState(null);
+   const handleDeleteClick = (user) => {
+    setDeleteUser(user);
+    
+   };
+   
+   const handleCancelDelete = () => {
+    setDeleteUser(null);
+   };
+
+    
 
   return (
     <div className='w-full p-4'>
@@ -61,8 +106,9 @@ export default function AllUsers() {
                     <td>{user.email}</td>
                     <td>{user.role}</td>
                     <td>{new Date(user.createdAt).toLocaleDateString()}</td>
-                    <td>
-                      <button className='bg-green-100 p-2 rounded-full hover:bg-green-400 '><FaEdit /></button>
+                    <td className='gap-2 flex justify-center '>
+                      <button className='bg-green-100 p-2 rounded-full hover:bg-green-400 '  onClick={() => handleEditClick(user)} ><FaEdit /></button>
+                      <button className='bg-red-400 text-white p-2 rounded-full hover:bg-red-700 ' onClick={()=>handleDeleteClick(user)} ><MdOutlineDelete /></button>
                     </td>
                   </tr>
                 )
@@ -71,8 +117,16 @@ export default function AllUsers() {
         </tbody>
       </table>
       {openUpload && (
-                <AddStaff onClose={setOpenUpload} callUsers={fetchAllUsers} />
+        <AddStaff onClose={setOpenUpload} callUsers={fetchAllUsers} />
       )}
+      {openEdit && editUserData && (
+                <EditUser onClose={setOpenEdit} initialData={editUserData} callProduct={fetchAllUsers} />
+            )}
+      {
+        deleteUser && (
+                <DeleteUser userId={deleteUser} callProduct={fetchAllUsers} onCancelDelete={handleCancelDelete} />
+            )
+      }
     </div>
   )
 }

@@ -29,6 +29,7 @@ export default function AdminPanel() {
                         {user?.name}
                     </p>
                     <p className="capitalize text-sm text-gray-200">{user?.role}</p>
+                    <p className="capitalize text-sm text-gray-200">{user?.restaurantId}</p>
                 </div>
                 <div>
                     <nav className="grid p-4">
@@ -56,12 +57,7 @@ export default function AdminPanel() {
                         >
                             Orders
                         </Link>
-                        <Link
-                            to="category"
-                            className="px-2 py-2 hover:bg-slate-100 rounded-md"
-                        >
-                            Category
-                        </Link>
+
                     </nav>
                 </div>
             </aside>

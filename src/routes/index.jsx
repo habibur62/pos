@@ -10,7 +10,6 @@ import AllProduct from "../pages/Allproduct";
 import Order from "../pages/Order"
 import AllOrder from "../pages/AllOrder";
 import Dashboard from "../pages/Dashboard";
-import Category from "../pages/Category";
 
 const router = createBrowserRouter([
     {
@@ -52,11 +51,6 @@ const router = createBrowserRouter([
             {
               path: "deshboard",
               element: <Dashboard />
-            }
-            ,
-            {
-              path: "category",
-              element: <Category />
             }
             
           ]

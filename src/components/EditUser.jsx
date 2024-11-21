@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import SummaryApi from '../common';
 import { MdCancel } from "react-icons/md";
 
-function EditCategory({onClose, initialData, callProduct}) {
+function EditUser({onClose, initialData, callProduct}) {
     const [formData, setFormData] = useState(initialData);
     const [loading, setLoading] = useState(false);
 
@@ -18,12 +18,18 @@ function EditCategory({onClose, initialData, callProduct}) {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        // Add form validation
+        if (!formData.name || !formData.email|| !formData.password) {
+            toast.error("Staff name, email,password are required!");
+            return;
+        }
+
         setLoading(true);
 
         try {
 
-            const dataResponse = await fetch(SummaryApi.updateCategory.url,{
-                method: SummaryApi.updateCategory.method,
+            const dataResponse = await fetch(SummaryApi.updateStaff.url,{
+                method: SummaryApi.updateStaff.method,
                 credentials: "include",
                 headers: {
                     "content-type": "application/json",
@@ -44,7 +50,7 @@ function EditCategory({onClose, initialData, callProduct}) {
             
         } catch (error) {
             console.error(error);
-            toast.error("Failed to upload category. Please try again later.");
+            toast.error("Failed to update Staff. Please try again later.");
         } finally {
             setLoading(false);
         }
@@ -56,21 +62,50 @@ function EditCategory({onClose, initialData, callProduct}) {
             <h2 className='font-bold text-2xl '>Edit Product</h2>
             <MdCancel className='text-red-500 text-xl cursor-pointer ' onClick={()=>onClose()} />
         </div>
-            <form onSubmit={handleSubmit}>
-
+        <form onSubmit={handleSubmit}>
                 <div>
-                    <label>Category</label>
+                    <label>Name:</label>
                     <input
                         className='border rounded w-full'
                         type="text"
-                        name="category"
-                        value={formData.category}
+                        name="name"
+                        value={formData.name}
                         onChange={handleChange}
+                        required
                     />
+                </div>
+                <div>
+                    <label>Email</label>
+                    <input
+                        className='border rounded w-full'
+
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div>
+                    <label>Role:</label>
+                    
+                    <select name="role"
+                        value={formData.role}
+                        onChange={handleChange}
+                        className='border rounded w-full'
+                    >
+                        <option value="">Select</option>
+                        <option value="Admin">
+                            Admin
+                        </option>
+                        <option value="Staff" >
+                            Staff
+                        </option>
+                    </select>
                 </div>
                 
                 <button type="submit" disabled={loading} className='my-2 bg-red-500 px-4 py-1 rounded w-full block items-center text-white hover:bg-red-600 transition-all ' >
-                    {loading ? "Editing..." : "Edit Category"}
+                    {loading ? "Updaing..." : "Update Staff"}
                 </button>
             </form>
         </div>
@@ -78,4 +113,4 @@ function EditCategory({onClose, initialData, callProduct}) {
   )
 }
 
-export default EditCategory
+export default EditUser

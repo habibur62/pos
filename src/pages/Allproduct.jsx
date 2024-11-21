@@ -6,17 +6,34 @@ import AddProduct from '../components/AddProduct';
 import EditProduct from '../components/EditProduct';
 import { MdDelete } from "react-icons/md";
 import DeleteProduct from '../components/DeleteProduct';
+import { useSelector } from 'react-redux';
 
 export default function AllProduct() {
+    const user = useSelector((state) => state?.user?.user);
+
     const [allProduct, setAllProduct] = useState([]);
     const [openUpload, setOpenUpload] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
     const [editProductData, setEditProductData] = useState(null); // Track data for the product to edit
+    
+
+     // This should show a valid restaurantId if it's set
+     var restuId = "";
+     if(user?.restaurantId){
+         restuId = user?.restaurantId;
+    }else{
+         restuId = user?._id
+    }
+    
 
     const fetchAllProduct = async () => {
         const dataResponse = await fetch(SummaryApi.allProduct.url, {
             method: SummaryApi.allProduct.method,
-            credentials: 'include'
+            credentials: 'include',
+            headers: {
+                "content-type" : "application/json"
+            },
+            body: JSON.stringify({ restaurantId: restuId })
         });
 
         const dataApi = await dataResponse.json();
@@ -31,7 +48,7 @@ export default function AllProduct() {
 
     useEffect(() => {
         fetchAllProduct();
-    }, []);
+    }, [restuId]);
 
     // Edit product
     const handleEditClick = (product) => {
@@ -45,9 +62,13 @@ export default function AllProduct() {
     const handleDeleteClick = (product) => {
         setDeleteProduct(product);
     };
+    
     const handleCancelDelete = () => {
         setDeleteProduct(null);
     };
+
+
+
     return (
         <div className='p-4 overflow-hidden'>
             <div className='flex justify-between items-center bg-gray-200 p-4 rounded mb-4'>
