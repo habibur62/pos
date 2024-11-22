@@ -44,6 +44,8 @@ export default function Order() {
     const [formData, setFormData] = useState({
         phone: "",
         customerName: "",
+        servedBy: "",
+        servedId:"",
         restaurantId: "",
     });
     
@@ -56,6 +58,8 @@ export default function Order() {
         setFormData({
             ...formData,
             [name]: value,
+            servedBy: user?.name,
+            servedId: user?._id,
             restaurantId: restuId
         });
     };
@@ -325,7 +329,7 @@ export default function Order() {
                 setOrderTotalQty(0);
             
             }}
-             products={orderItems} total={orderTotal} qty={orderTotalQty} />
+             products={orderItems} total={orderTotal} qty={orderTotalQty} servedBy={formData.servedBy} />
         )
     }
     </div>

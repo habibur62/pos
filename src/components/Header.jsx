@@ -58,7 +58,7 @@ export default function Header() {
                <div >
                 {
                     user?._id ? (
-                        <button onClick={handleLogout} className='px-2 py-1 text-white bg-red-500 rounded-full '>Logout</button>
+                        <Link to={"/login"} onClick={handleLogout} className='px-2 py-1 text-white bg-red-500 rounded-full '>Logout</Link>
                     ) : (
                         <Link to={"/login"} className='px-2 py-1 text-white bg-red-500 rounded-full '>Login</Link>
                     )

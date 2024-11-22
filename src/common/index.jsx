@@ -61,7 +61,7 @@ const SummaryApi = {
     },
     allOrders: {
         url:`${backendDomain}/api/all-orders`,
-        method: "get"
+        method: "post"
     },
     
 

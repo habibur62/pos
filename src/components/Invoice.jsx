@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 
-function Invoice({onClose, products, total, qty}) {
+function Invoice({onClose, products, total, qty,servedBy}) {
 
    // console.log(products);
 
@@ -25,7 +25,7 @@ function Invoice({onClose, products, total, qty}) {
             <div>
                 <p>Date and Time: {now}</p>
                 <div className='flex justify-between '>
-                <p>Served By: Polash</p>
+                <p>Served By: {servedBy}</p>
                 <p>Bill No: HM558654</p>
                 </div>
             </div>

@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react'
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 function Dashboard() {
     const [allOrders, setAllOrders] = useState([]);
- 
+    const user = useSelector((state) => state?.user?.user);
+
     const fetchAllOrders = async () => {
         const dataResponse = await fetch(SummaryApi.allOrders.url, {
             method: SummaryApi.allOrders.method,
-            credentials: 'include'
+            credentials: 'include',
+            headers: {
+                "content-type" : "application/json"
+            },
+            body: JSON.stringify({user })
         });
 
         const dataApi = await dataResponse.json();
@@ -23,7 +29,7 @@ function Dashboard() {
 
     useEffect(() => {
         fetchAllOrders();
-    }, []);
+    }, [user]);
 
 
 const [dailySales, setDailySales] = useState(0);

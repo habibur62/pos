@@ -6,6 +6,7 @@ import AddProduct from '../components/AddProduct';
 import EditProduct from '../components/EditProduct';
 import { MdDelete } from "react-icons/md";
 import DeleteProduct from '../components/DeleteProduct';
+import { useSelector } from 'react-redux';
 
 export default function AllOrder() {
     const [allOrders, setAllOrders] = useState([]);
@@ -13,10 +14,18 @@ export default function AllOrder() {
     const [openEdit, setOpenEdit] = useState(false);
     const [editProductData, setEditProductData] = useState(null); // Track data for the product to edit
 
+    // This should show a valid restaurantId if it's set
+    const user = useSelector((state) => state?.user?.user);
+
+
     const fetchAllOrders = async () => {
         const dataResponse = await fetch(SummaryApi.allOrders.url, {
             method: SummaryApi.allOrders.method,
-            credentials: 'include'
+            credentials: 'include',
+            headers: {
+                "content-type" : "application/json"
+            },
+            body: JSON.stringify({ user: user })
         });
 
         const dataApi = await dataResponse.json();
@@ -31,7 +40,7 @@ export default function AllOrder() {
 
     useEffect(() => {
         fetchAllOrders();
-    }, []);
+    }, [user]);
 
 
     return (
@@ -49,6 +58,8 @@ export default function AllOrder() {
                             <th className='px-4 py-2 border'>Customer Name</th>
                             <th className='px-4 py-2 border'>Customer Phone</th>                  
                             <th className='px-4 py-2 border'>Product Details</th>
+                            <th className='px-4 py-2 border'>Served By</th>
+
                             <th className='px-4 py-2 border'>Created Date</th>
                             <th className='px-4 py-2 border'>Report</th>
                         </tr>
@@ -66,13 +77,14 @@ export default function AllOrder() {
                                     {product?.items?.map((item, index)=>(
                                         <ul className="list-disc ml-6" key={index}>
                                         <li >
-                                            {item.productId} - Quantity: {item.quantity} - Price: {item.productPrice}
+                                            {item.productName} - Quantity: {item.quantity} - Price: {item.productPrice}
                                         </li>
                                         </ul>
                                     ))
                                     
                                     }
                                 </td>
+                                <td className='px-4 py-2 border'>{product?.servedBy}</td>
 
                                 <td className='px-4 py-2 border'>{new Date(product.createdAt).toLocaleDateString()}</td>
                                 <td className='px-4 py-2 border text-center'>
