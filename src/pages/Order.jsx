@@ -3,34 +3,50 @@ import SummaryApi from '../common'
 import { toast } from 'react-toastify'
 import Invoice from '../components/Invoice'
 import { FaRegTrashAlt } from "react-icons/fa";
+import { useSelector } from 'react-redux';
 
 export default function Order() {
+    const user = useSelector((state) => state?.user?.user);
+
     const [allProduct, setAllProduct] = useState([])
-    const fetchAllProduct = async()=>{
-        const dataResponse = await fetch(SummaryApi.allProduct.url,{
-            method: SummaryApi.allProduct.method,
-            credentials: 'include'
-        })
+    var restuId = "";
+    if(user?.restaurantId){
+        restuId = user?.restaurantId;
+   }else{
+        restuId = user?._id
+   }
+   
 
-        const dataApi = await dataResponse.json()
+   const fetchAllProduct = async () => {
+       const dataResponse = await fetch(SummaryApi.allProduct.url, {
+           method: SummaryApi.allProduct.method,
+           credentials: 'include',
+           headers: {
+               "content-type" : "application/json"
+           },
+           body: JSON.stringify({ restaurantId: restuId })
+       });
 
-        if(dataApi.success){
-          setAllProduct(dataApi.data)
-        }
-        if(dataApi.error){
-          toast.error(dataApi.error);
-        }
-    }
+       const dataApi = await dataResponse.json();
 
-    useEffect(()=>{
-        fetchAllProduct()
-    },[])
+       if (dataApi.success) {
+           setAllProduct(dataApi.data);
+       }
+       if (dataApi.error) {
+           toast.error(dataApi.error);
+       }
+   };
+
+   useEffect(() => {
+       fetchAllProduct();
+   }, [restuId]);
     
     const [formData, setFormData] = useState({
         phone: "",
         customerName: "",
+        restaurantId: "",
     });
-
+    
 
 
     const [loading, setLoading] = useState(false);
@@ -40,6 +56,7 @@ export default function Order() {
         setFormData({
             ...formData,
             [name]: value,
+            restaurantId: restuId
         });
     };
 
@@ -113,7 +130,7 @@ export default function Order() {
     const [openInvoice, setOpenInvoice] = useState(false)
 
 
-    //customer search by phone
+    //customer search by phone.........................
     const [customers, setCustomers] = useState()
 
     const fetchAllCustomers = async()=>{
@@ -127,7 +144,6 @@ export default function Order() {
 
         })
         
-
         const dataApi = await dataResponse.json()
        // console.log("phone", customers);
         if(dataApi.success){
@@ -141,8 +157,11 @@ export default function Order() {
           toast.error(dataApi.error);
         }
     }
+    // useEffect(() => {
+    //     fetchAllCustomers();
+    // }, []);
 
-    //order submit.................
+    //order submit........................
 
     const  handleSubmitOrder = async () => {
 
@@ -297,9 +316,10 @@ export default function Order() {
             <Invoice onClose={()=>{
                 setOpenInvoice(!openInvoice);
                 setOrderItems([]);
+                setCustomers("")
                 setFormData({
                     phone: "",
-            customerName: "",
+                    customerName: "",
                 });
                 setOrderTotal(0);
                 setOrderTotalQty(0);

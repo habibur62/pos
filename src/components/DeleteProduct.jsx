@@ -1,8 +1,17 @@
 import React, { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import SummaryApi from '../common';
+import { useSelector } from 'react-redux';
 
 function DeleteProduct({ productId, callProduct, onCancelDelete }) {
+    const user = useSelector((state) => state?.user?.user);
+
+    var restuId = "";
+    if(user?.restaurantId){
+        restuId = user?.restaurantId;
+   }else{
+        restuId = user?._id
+   }
     useEffect(() => {
         const deleteProduct = async () => {
             const isConfirmed = window.confirm('Are you sure you want to delete this product?');
@@ -19,7 +28,7 @@ function DeleteProduct({ productId, callProduct, onCancelDelete }) {
                     headers: {
                         "content-type": "application/json",
                     },
-                    body: JSON.stringify({ _id: productId._id })
+                    body: JSON.stringify({ _id: productId._id, restuId })
                 });
 
                 const dataApi = await dataResponse.json();

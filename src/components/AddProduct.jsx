@@ -2,13 +2,25 @@ import React, { useState } from 'react'
 import { toast } from 'react-toastify';
 import SummaryApi from '../common';
 import { MdCancel } from "react-icons/md";
+import { useSelector } from 'react-redux';
 
-function AddProduct({onclose, callProduct}) {
+function AddProduct({onClose, callProduct}) {
+    const user = useSelector((state) => state?.user?.user);
+
+    var restuId = "";
+    if(user?.restaurantId){
+        restuId = user?.restaurantId;
+   }else{
+        restuId = user?._id
+   }
+
+
     const [formData, setFormData] = useState({
         name: "",
         price: "",
         description: "",
         category: "",
+        restaurantId: ""
     });
 
     const [loading, setLoading] = useState(false);
@@ -18,6 +30,7 @@ function AddProduct({onclose, callProduct}) {
         setFormData({
             ...formData,
             [name]: value,
+            restaurantId: restuId
         });
     };
 
@@ -47,7 +60,7 @@ function AddProduct({onclose, callProduct}) {
 
           if(dataApi.success){
             toast.success(dataApi.message)
-            onclose()
+            onClose()
             callProduct()
           }
           if(dataApi.error){
@@ -66,7 +79,7 @@ function AddProduct({onclose, callProduct}) {
         <div className='bg-white w-full max-w-[400px] h-auto p-2 rounded shadow-sm '>
         <div className='flex justify-between items-center mb-4 '>
             <h2 className='font-bold text-2xl '>Add Product</h2>
-            <MdCancel className='text-red-500 text-xl cursor-pointer ' onClick={()=>onclose()} />
+            <MdCancel className='text-red-500 text-xl cursor-pointer ' onClick={()=>onClose()} />
         </div>
             <form onSubmit={handleSubmit}>
                 <div>

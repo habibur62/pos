@@ -2,8 +2,17 @@ import React, { useState } from 'react'
 import { toast } from 'react-toastify';
 import SummaryApi from '../common';
 import { MdCancel } from "react-icons/md";
+import { useSelector } from 'react-redux';
 
 function EditProduct({onClose, initialData, callProduct}) {
+    const user = useSelector((state) => state?.user?.user);
+
+    var restuId = "";
+    if(user?.restaurantId){
+        restuId = user?.restaurantId;
+   }else{
+        restuId = user?._id
+   }
     const [formData, setFormData] = useState(initialData);
     const [loading, setLoading] = useState(false);
 
@@ -12,6 +21,7 @@ function EditProduct({onClose, initialData, callProduct}) {
         setFormData({
             ...formData,
             [name]: value,
+            restaurantId: restuId,
         });
     };
 
@@ -42,7 +52,7 @@ function EditProduct({onClose, initialData, callProduct}) {
           if(dataApi.success){
             toast.success(dataApi.message)
             onClose()
-            callProduct
+            callProduct()
           }
           if(dataApi.error){
             toast.error(dataApi.message)
