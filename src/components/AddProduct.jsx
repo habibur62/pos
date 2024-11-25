@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { toast } from 'react-toastify';
 import SummaryApi from '../common';
 import { MdCancel } from "react-icons/md";
@@ -13,7 +13,31 @@ function AddProduct({onClose, callProduct}) {
    }else{
         restuId = user?._id
    }
+   
+   // This should show a valid restaurantId if it's set
+   const [allCategory, setAllCategory] = useState([])
+   const fetchAllCategory =async()=>{
+       const dataResponse = await fetch(SummaryApi.allCategory.url, {
+           method: SummaryApi.allCategory.method,
+           credentials: 'include',
+           headers: {
+               "content-type" : "application/json"
+           },
+           body: JSON.stringify({ restaurantId: restuId })
+       });
 
+       const dataApi = await dataResponse.json();
+
+       if (dataApi.success) {
+           setAllCategory(dataApi.data);
+       }
+       if (dataApi.error) {
+           toast.error(dataApi.error);
+       }
+   }
+   useEffect(()=>{
+       fetchAllCategory()
+   },[restuId])
 
     const [formData, setFormData] = useState({
         name: "",
@@ -74,6 +98,8 @@ function AddProduct({onClose, callProduct}) {
             setLoading(false);
         }
     }
+
+    
   return (
     <div className='bg-red-400 fixed w-full h-full left-0 top-0 flex justify-center items-center'>
         <div className='bg-white w-full max-w-[400px] h-auto p-2 rounded shadow-sm '>
@@ -107,13 +133,24 @@ function AddProduct({onClose, callProduct}) {
                 </div>
                 <div>
                     <label>Category</label>
-                    <input
-                        className='border rounded w-full'
-                        type="text"
-                        name="category"
+                    <select name="category"
                         value={formData.category}
                         onChange={handleChange}
-                    />
+                        className='border rounded w-full'
+                    >
+                        <option value="">Select</option>
+
+                        {
+                            allCategory.map((item,index)=>{
+                                return (
+                                    <option key={index} value={item.name}>
+                                        {item.name}
+                                    </option>
+                                )
+                            })
+                        }
+
+                    </select>
                 </div>
                 <div>
                     <label>Description</label>

@@ -16,6 +16,31 @@ export default function Order() {
         restuId = user?._id
    }
    
+   // This should show a valid restaurantId if it's set
+   const [allCategory, setAllCategory] = useState([])
+   const fetchAllCategory =async()=>{
+       const dataResponse = await fetch(SummaryApi.allCategory.url, {
+           method: SummaryApi.allCategory.method,
+           credentials: 'include',
+           headers: {
+               "content-type" : "application/json"
+           },
+           body: JSON.stringify({ restaurantId: restuId })
+       });
+
+       const dataApi = await dataResponse.json();
+
+       if (dataApi.success) {
+           setAllCategory(dataApi.data);
+       }
+       if (dataApi.error) {
+           toast.error(dataApi.error);
+       }
+   }
+   useEffect(()=>{
+       fetchAllCategory()
+   },[restuId])
+
 
    const fetchAllProduct = async () => {
        const dataResponse = await fetch(SummaryApi.allProduct.url, {
@@ -229,9 +254,9 @@ export default function Order() {
                         required
                     >
                         <option value="">Category</option>
-                        {allProduct.map((product, idx) => (
-                            <option value={product.category} key={idx}>
-                                {product.category}
+                        {allCategory.map((item, idx) => (
+                            <option value={item.name} key={idx}>
+                                {item.name}
                             </option>
                         ))}
                     </select>

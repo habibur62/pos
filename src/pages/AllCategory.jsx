@@ -8,8 +8,7 @@ import { toast } from 'react-toastify';
 import DeleteCategory from '../components/DeleteCategory';
 
 function AllCategory() {
-    const user = useSelector((state) => state?.user?.user);
-
+   
     const [allCategory, setAllCategory] = useState([])
     const [openUpload, setOpenUpload] = useState(false);
     const [openEdit, setOpenEdit] = useState(false);
@@ -17,6 +16,7 @@ function AllCategory() {
 
 
     // This should show a valid restaurantId if it's set
+    const user = useSelector((state) => state?.user?.user);
     var restuId = "";
     if(user?.restaurantId){
         restuId = user?.restaurantId;
