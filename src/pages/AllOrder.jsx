@@ -90,7 +90,6 @@ export default function AllOrder() {
                                 <td className='px-4 py-2 border text-center'>
                                     <button 
                                         className='bg-red-500 text-white p-2 rounded-full hover:bg-red-700'
-                                        
                                     >
                                         Print
                                     </button>

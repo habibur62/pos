@@ -1,3 +1,4 @@
+
 const backendDomain = "http://localhost:8080"
 
 
@@ -34,11 +35,18 @@ const SummaryApi = {
         url:`${backendDomain}/api/delete-staff`,
         method: "delete"
     },
+    addCategory:{
+        url:`${backendDomain}/api/add-category`,
+        method: "post"
+    },
+    allCategory : {
+        url:`${backendDomain}/api/all-category`,
+        method: "post"
+    },
     createProduct: {
         url:`${backendDomain}/api/create`,
         method: "post"
     },
-    
     allProduct: {
         url:`${backendDomain}/api/all-product`,
         method: "post"

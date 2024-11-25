@@ -45,7 +45,9 @@ export default function Header() {
             </div>
             <div className='flex justify-between items-center gap-4 '>
                 <div className='text-3xl cursor-pointer w-10 h-10 ' >
-                    <Link to={"admin-panel"}>
+                   {
+                    user?._id && (
+                        <Link to={"admin-panel"}>
                     {
                         user?.profilePic ? (
                             <img src={user?.profilePic} className='w-10 h-10 rounded-full ' />
@@ -54,6 +56,9 @@ export default function Header() {
                         )
                     }
                     </Link>
+                    )
+                   }
+                    
                </div>
                <div >
                 {

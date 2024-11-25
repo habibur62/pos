@@ -46,6 +46,12 @@ export default function AdminPanel() {
                             All Users
                         </Link>
                         <Link
+                            to="all-category"
+                            className="px-2 py-2 hover:bg-slate-100 rounded-md"
+                        >
+                            All Category
+                        </Link>
+                        <Link
                             to="all-product"
                             className="px-2 py-2 hover:bg-slate-100 rounded-md"
                         >
