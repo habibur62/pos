@@ -1,5 +1,5 @@
 
-const backendDomain = "http://localhost:8080"
+const backendDomain = "https://posbackend-production.up.railway.app"
 
 
 const SummaryApi = {
